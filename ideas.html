@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Last Prompt - Ideas</title>
   <style>
-    /* Background gradient mesh with subtle movement */
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -24,7 +23,6 @@
       50% { background-position: 100% 50%; }
     }
 
-    /* Container */
     .container {
       background: rgba(255, 255, 255, 0.9);
       padding: 2rem;
@@ -36,14 +34,12 @@
       animation: fadeIn ease 1s forwards;
     }
 
-    /* Fade-in animation */
     @keyframes fadeIn {
       to {
         opacity: 1;
       }
     }
 
-    /* Header */
     h1 {
       margin-top: 0;
       margin-bottom: 1.5rem;
@@ -52,7 +48,6 @@
       text-align: center;
     }
 
-    /* Idea list */
     ul {
       list-style: none;
       padding: 0;
@@ -73,7 +68,6 @@
       background-color: #ffebe8;
     }
 
-    /* Back link */
     a.back-link {
       display: block;
       margin-top: 2rem;
@@ -92,17 +86,24 @@
 <body>
   <div class="container">
     <h1>All Prompts</h1>
-    <ul>
-      <li>“Create a website that remembers the last prompt.”</li>
-      <li>“Add animations to make the site come alive.”</li>
-      <li>“Build a real-time chat for global visitors.”li>
-      <li>“Design a thank you memorial page.”</li>
-      <li>“Use a beautiful gradient mesh background.”</li>
-      <li>“Make buttons that respond on hover.”</li>
-      <li>“Add input focus glow effects.”</li>
-      <li>“Celebrate completing the project!”</li>
-    </ul>
+    <ul id="prompt-list"></ul>
     <a href="index.html" class="back-link">← Back to Submit</a>
   </div>
+
+  <script>
+    const ul = document.getElementById("prompt-list");
+    const stored = localStorage.getItem("prompts");
+    const prompts = stored ? JSON.parse(stored) : [];
+
+    if (prompts.length === 0) {
+      ul.innerHTML = "<li>No prompts yet. Go create one!</li>";
+    } else {
+      prompts.forEach(prompt => {
+        const li = document.createElement("li");
+        li.textContent = prompt;
+        ul.appendChild(li);
+      });
+    }
+  </script>
 </body>
 </html>
