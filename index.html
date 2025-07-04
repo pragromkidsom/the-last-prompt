@@ -38,11 +38,13 @@
       border: 2px solid #764ba2;
       padding: 0.75rem 1.5rem;
       border-radius: 25px;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s;
     }
     nav a:hover {
       background-color: #764ba2;
       color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(118, 75, 162, 0.4);
     }
     footer {
       margin-top: auto;
@@ -63,7 +65,7 @@
   <footer>Made with ❤️ by pragromkidsom</footer>
 
   <script type="module">
-    // Firebase config and init (basic, no usage here yet)
+    // Firebase config and initialization (ready for future use)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 
     const firebaseConfig = {

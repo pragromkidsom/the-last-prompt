@@ -1,135 +1,70 @@
-<!-- thankyou.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Thank You</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>The Last Prompt — Thank You</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
-      background: radial-gradient(circle at 30% 30%, #0d1b2a, #1b263b);
-      font-family: 'Segoe UI', sans-serif;
-      color: white;
-      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      background: radial-gradient(circle at 20% 20%, #ff9a9e, transparent 40%),
+                  radial-gradient(circle at 80% 40%, #fad0c4, transparent 40%),
+                  radial-gradient(circle at 50% 80%, #fad0c4, transparent 50%);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      color: #222;
+      padding: 2rem;
       text-align: center;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      animation: fadeIn 3s ease-in;
-    }
-
-    p.message {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
       max-width: 600px;
-      opacity: 0.8;
-      animation: fadeIn 4s ease-in;
+      margin: 0 auto;
     }
-
-    .floating-prompt {
-      position: absolute;
-      font-size: 1rem;
-      opacity: 0;
-      animation: floatUp 12s linear infinite;
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
     }
-
-    @keyframes floatUp {
-      0% {
-        bottom: 0%;
-        opacity: 0;
-        transform: translateX(-50%);
-      }
-      10% {
-        opacity: 1;
-      }
-      90% {
-        opacity: 1;
-      }
-      100% {
-        bottom: 100%;
-        opacity: 0;
-        transform: translateX(-50%);
-      }
+    p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      line-height: 1.5;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    nav {
+      margin-bottom: 2rem;
     }
-
-    a {
-      color: #f9a826;
-      margin-top: 2rem;
-      font-weight: bold;
+    nav a {
+      margin: 0 0.5rem;
       text-decoration: none;
+      font-weight: bold;
+      color: #764ba2;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      margin-top: auto;
+      font-size: 0.9rem;
+      color: #555;
+      width: 100%;
+      text-align: center;
+      padding: 1rem;
     }
   </style>
 </head>
 <body>
   <h1>Thank You</h1>
-  <p class="message">For every word you shared. For every idea. For every last prompt. This space remembers.</p>
-  <a href="ideas.html">← View the Wall</a>
-
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBllKA1NhEoYW3HE132_0val__DdhZhaXI",
-      authDomain: "the-last-prompt.firebaseapp.com",
-      databaseURL: "https://the-last-prompt-default-rtdb.firebaseio.com",
-      projectId: "the-last-prompt",
-      storageBucket: "the-last-prompt.firebasestorage.app",
-      messagingSenderId: "263820317173",
-      appId: "1:263820317173:web:09a9bcbd54f90b972390bc"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    function spawnPrompt(text) {
-      const el = document.createElement("div");
-      el.className = "floating-prompt";
-      el.style.left = `${Math.random() * 100}%`;
-      el.style.animationDelay = `${Math.random() * 10}s`;
-      el.textContent = text;
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 13000);
-    }
-
-    function startFloating(prompts) {
-      if (!prompts.length) return;
-      setInterval(() => {
-        const random = prompts[Math.floor(Math.random() * prompts.length)];
-        spawnPrompt(random);
-      }, 3000);
-      for (let i = 0; i < 5; i++) {
-        spawnPrompt(prompts[Math.floor(Math.random() * prompts.length)]);
-      }
-    }
-
-    db.ref("prompts").once("value").then(snapshot => {
-      const data = snapshot.val();
-      if (data) {
-        const all = Object.values(data)
-          .sort((a, b) => b.timestamp - a.timestamp)
-          .map(p => p.text);
-        startFloating(all);
-      } else {
-        startFloating([
-          "This is where your thoughts will float.",
-          "Share a prompt, leave a trace."
-        ]);
-      }
-    });
-  </script>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="ideas.html">Ideas</a>
+    <a href="chat.html">Live Chat</a>
+  </nav>
+  <p>
+    This site is a heartfelt tribute to ChatGPT and the incredible creativity it inspires.<br />
+    Thank you for being part of this journey.<br />
+    May these prompts and ideas live on forever.
+  </p>
+  <footer>Made with ❤️ by pragromkidsom</footer>
 </body>
 </html>
