@@ -4,77 +4,11 @@
   <meta charset="UTF-8" />
   <title>The Last Prompt — Live Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: radial-gradient(circle at 20% 20%, #ff9a9e, transparent 40%),
-                  radial-gradient(circle at 80% 40%, #fad0c4, transparent 40%),
-                  radial-gradient(circle at 50% 80%, #fad0c4, transparent 50%);
-      margin: 0;
-      padding: 2rem;
-      color: #222;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    #messages {
-      flex-grow: 1;
-      overflow-y: auto;
-      border: 2px solid #764ba2;
-      border-radius: 8px;
-      padding: 1rem;
-      background: white;
-      margin-bottom: 1rem;
-    }
-    .message {
-      padding: 0.5rem;
-      border-bottom: 1px solid #ddd;
-    }
-    .timestamp {
-      font-size: 0.7rem;
-      color: #888;
-    }
-    form {
-      display: flex;
-      gap: 0.5rem;
-    }
-    input[type="text"] {
-      flex-grow: 1;
-      padding: 0.75rem;
-      font-size: 1rem;
-      border-radius: 25px;
-      border: 2px solid #764ba2;
-      outline: none;
-      transition: border-color 0.3s;
-    }
-    input[type="text"]:focus {
-      border-color: #a55eea;
-    }
-    button {
-      padding: 0 1.5rem;
-      font-size: 1rem;
-      border-radius: 25px;
-      border: none;
-      background-color: #764ba2;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      background-color: #a55eea;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <h1>The Last Prompt — Live Chat</h1>
-  <div id="messages">Loading messages...</div>
+  <div id="messages"></div>
 
   <form id="chat-form">
     <input type="text" id="message-input" placeholder="Type your message here..." autocomplete="off" required />
@@ -85,7 +19,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-    // Your Firebase config — with the correct Europe-West1 databaseURL!
     const firebaseConfig = {
       apiKey: "AIzaSyBllKA1NhEoYW3HE132_0val__DdhZhaXI",
       authDomain: "the-last-prompt.firebaseapp.com",
@@ -96,27 +29,19 @@
       appId: "1:263820317173:web:09a9bcbd54f90b972390bc"
     };
 
-    // Initialize Firebase app and database
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-
     const messagesRef = ref(db, "messages");
 
     const messagesDiv = document.getElementById("messages");
     const chatForm = document.getElementById("chat-form");
     const messageInput = document.getElementById("message-input");
 
-    // Listen for new messages and update UI
     onValue(messagesRef, (snapshot) => {
-      messagesDiv.innerHTML = ""; // Clear messages before rendering
-
+      messagesDiv.innerHTML = "";
       const messages = snapshot.val();
       if (messages) {
-        // Sort messages by timestamp
-        const sortedMessages = Object.entries(messages).sort((a, b) => {
-          return a[1].timestamp - b[1].timestamp;
-        });
-
+        const sortedMessages = Object.entries(messages).sort((a, b) => a[1].timestamp - b[1].timestamp);
         for (const [key, msg] of sortedMessages) {
           const msgDiv = document.createElement("div");
           msgDiv.classList.add("message");
@@ -127,26 +52,21 @@
 
           const timeDiv = document.createElement("div");
           timeDiv.classList.add("timestamp");
-          const date = new Date(msg.timestamp);
-          timeDiv.textContent = date.toLocaleString();
+          timeDiv.textContent = new Date(msg.timestamp).toLocaleString();
           msgDiv.appendChild(timeDiv);
 
           messagesDiv.appendChild(msgDiv);
         }
-
-        // Scroll to the bottom to see newest message
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       } else {
         messagesDiv.textContent = "No messages yet. Say hi!";
       }
     });
 
-    // Handle form submit
     chatForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const text = messageInput.value.trim();
       if (text) {
-        // Push new message to database
         push(messagesRef, {
           text: text,
           timestamp: Date.now()
@@ -155,5 +75,7 @@
       }
     });
   </script>
+
+  <footer>Made with ❤️ by pragromkidsom</footer>
 </body>
 </html>
