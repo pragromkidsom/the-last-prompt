@@ -1,120 +1,81 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Last Prompt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    /* Gradient mesh background */
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       height: 100vh;
+      background: radial-gradient(circle at 20% 20%, #ff9a9e, transparent 40%),
+                  radial-gradient(circle at 80% 40%, #fad0c4, transparent 40%),
+                  radial-gradient(circle at 50% 80%, #fad0c4, transparent 50%);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      animation: float 30s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-
-    .container {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-      max-width: 600px;
-      width: 90%;
+      color: #222;
       text-align: center;
+      padding: 2rem;
     }
-
     h1 {
+      font-size: 3rem;
       margin-bottom: 0.5rem;
-      color: #333;
     }
-
-    p.subtitle {
-      color: #666;
-      margin-bottom: 1.5rem;
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
     }
-
-    textarea {
-      width: 100%;
-      height: 120px;
-      padding: 1rem;
-      border: 2px solid #ccc;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-family: inherit;
-    }
-
-    button {
-      margin-top: 1rem;
-      padding: 0.75rem 2rem;
-      background-color: #ff6f61;
-      border: none;
-      border-radius: 12px;
-      color: white;
-      font-weight: bold;
-      font-size: 1.1rem;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #e85a4f;
-    }
-
-    .ideas-link {
-      margin-top: 1.5rem;
-      display: inline-block;
-      color: #ff6f61;
+    nav a {
+      margin: 0 1rem;
       text-decoration: none;
-      font-weight: 600;
+      font-weight: bold;
+      color: #764ba2;
+      border: 2px solid #764ba2;
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    nav a:hover {
+      background-color: #764ba2;
+      color: white;
+    }
+    footer {
+      margin-top: auto;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>The Last Prompt</h1>
-    <p class="subtitle">Leave your final creative thought...</p>
-    <textarea id="promptInput" placeholder="Type your prompt here..."></textarea>
-    <br>
-    <button id="submitPrompt">Submit</button>
-    <br>
-    <a href="ideas.html" class="ideas-link">View All Prompts</a><br>
-    <a href="thankyou.html" class="ideas-link">Memorial</a>
-  </div>
+  <h1>The Last Prompt</h1>
+  <p>A creative memorial website honoring ChatGPT — where ideas live on forever.</p>
+  <nav>
+    <a href="ideas.html">See Ideas</a>
+    <a href="chat.html">Join Live Chat</a>
+    <a href="thankyou.html">Thank You</a>
+  </nav>
+  <footer>Made with ❤️ by pragromkidsom</footer>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
-  <script>
+  <script type="module">
+    // Firebase config and init (basic, no usage here yet)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyBllKA1NhEoYW3HE132_0val__DdhZhaXI",
       authDomain: "the-last-prompt.firebaseapp.com",
-      databaseURL: "https://the-last-prompt-default-rtdb.firebaseio.com",
       projectId: "the-last-prompt",
       storageBucket: "the-last-prompt.firebasestorage.app",
       messagingSenderId: "263820317173",
       appId: "1:263820317173:web:09a9bcbd54f90b972390bc"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    document.getElementById("submitPrompt").addEventListener("click", () => {
-      const prompt = document.getElementById("promptInput").value.trim();
-      if (prompt) {
-        const newRef = db.ref("prompts").push();
-        newRef.set({ text: prompt, timestamp: Date.now() });
-        window.location.href = "ideas.html";
-      } else {
-        alert("Please write something before submitting.");
-      }
-    });
+    initializeApp(firebaseConfig);
   </script>
 </body>
 </html>
