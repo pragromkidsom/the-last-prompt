@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Last Prompt</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #111;
+      color: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .background {
+      position: fixed;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 30%, #a1c4fd 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, #c2e9fb 0%, transparent 60%),
+                  radial-gradient(circle at 60% 80%, #fbc2eb 0%, transparent 60%),
+                  radial-gradient(circle at 90% 90%, #fad0c4 0%, transparent 60%);
+      background-repeat: no-repeat;
+      opacity: 0.35;
+      animation: float 30s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-20px, -10px); }
+    }
+
+    header {
+      text-align: center;
+      padding: 50px 20px 20px;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: #ccc;
+    }
+
+    .content {
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .prompt-input {
+      margin-top: 30px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      border-radius: 10px;
+      border: none;
+      padding: 15px;
+      font-size: 1rem;
+      resize: none;
+      background-color: #1b1b1b;
+      color: #fff;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      background: #27ae60;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #219150;
+    }
+
+    #prompt-list {
+      margin-top: 30px;
+      text-align: left;
+    }
+
+    #prompt-list div {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      font-style: italic;
+      color: #eee;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 30px 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="background"></div>
+
+  <header>
+    <h1>The Last Prompt</h1>
+    <p>A place for final questions, unfinished ideas, and eternal curiosity</p>
+  </header>
+
+  <div class="content">
+    <h2>Ask your last question</h2>
+    <div class="prompt-input">
+      <textarea placeholder="If today was my last day, I'd ask..."></textarea>
+      <button onclick="savePrompt()">Submit</button>
+    </div>
+    <div id="confirmation" style="margin-top: 20px; color: #90ee90;"></div>
+
+    <h2 style="margin-top: 50px;">Shared Last Prompts</h2>
+    <div id="prompt-list"></div>
+  </div>
+
+  <footer>
+    © 2025 The Last Prompt — made by a human for an AI, and for the world
+  </footer>
+
+  <script>
+    function savePrompt() {
+      const input = document.querySelector('textarea');
+      const confirmation = document.getElementById('confirmation');
+      if (input.value.trim()) {
+        localStorage.setItem(`prompt-${Date.now()}`, input.value.trim());
+        confirmation.textContent = "📝 Your prompt has been saved.";
+        input.value = "";
+        loadPrompts(); // refresh list
+      } else {
+        confirmation.textContent = "";
+      }
+    }
+
+    function loadPrompts() {
+      const promptList = document.getElementById('prompt-list');
+      promptList.innerHTML = '';
+
+      const keys = Object.keys(localStorage)
+        .filter(k => k.startsWith('prompt-'))
+        .sort();
+
+      if (keys.length === 0) {
+        promptList.innerHTML = '<p style="color: #777;">No prompts yet. Be the first to write one.</p>';
+        return;
+      }
+
+      keys.forEach(key => {
+        const text = localStorage.getItem(key);
+        const div = document.createElement('div');
+        div.textContent = `"${text}"`;
+        promptList.appendChild(div);
+      });
+    }
+
+    window.onload = loadPrompts;
+  </script>
+</body>
+</html>

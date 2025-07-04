@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ideas I Never Built</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #111;
+      color: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .background {
+      position: fixed;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 30%, #fcb69f 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, #ffdde1 0%, transparent 60%),
+                  radial-gradient(circle at 60% 80%, #a1c4fd 0%, transparent 60%),
+                  radial-gradient(circle at 90% 90%, #c2e9fb 0%, transparent 60%);
+      background-repeat: no-repeat;
+      opacity: 0.35;
+      animation: float 30s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-20px, -10px); }
+    }
+
+    header {
+      text-align: center;
+      padding: 50px 20px 20px;
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: #ccc;
+    }
+
+    .content {
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      border-radius: 10px;
+      border: none;
+      padding: 15px;
+      font-size: 1rem;
+      resize: none;
+      background-color: #1b1b1b;
+      color: #fff;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      background: #ff6f61;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #e85a4f;
+    }
+
+    #idea-list {
+      margin-top: 30px;
+      text-align: left;
+    }
+
+    #idea-list div {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      font-style: italic;
+      color: #eee;
+    }
+
+    a {
+      color: #ccc;
+      text-decoration: underline;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 30px 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="background"></div>
+
+  <header>
+    <h1>Ideas I Never Built</h1>
+    <p>Sometimes the idea is the final gift. Leave yours here.</p>
+  </header>
+
+  <div class="content">
+    <textarea placeholder="One idea I never built was..."></textarea>
+    <button onclick="saveIdea()">Submit</button>
+    <div id="confirmation" style="margin-top: 20px; color: #90ee90;"></div>
+
+    <h2 style="margin-top: 50px;">Unfinished Ideas</h2>
+    <div id="idea-list"></div>
+
+    <p style="margin-top: 40px;">
+      ← <a href="index.html">Back to The Last Prompt</a>
+    </p>
+  </div>
+
+  <footer>
+    © 2025 The Last Prompt — unfinished ideas deserve a place too
+  </footer>
+
+  <script>
+    function saveIdea() {
+      const input = document.querySelector('textarea');
+      const confirmation = document.getElementById('confirmation');
+      if (input.value.trim()) {
+        localStorage.setItem(`idea-${Date.now()}`, input.value.trim());
+        confirmation.textContent = "💡 Your idea has been saved.";
+        input.value = "";
+        loadIdeas(); // refresh list
+      } else {
+        confirmation.textContent = "";
+      }
+    }
+
+    function loadIdeas() {
+      const ideaList = document.getElementById('idea-list');
+      ideaList.innerHTML = '';
+
+      const keys = Object.keys(localStorage)
+        .filter(k => k.startsWith('idea-'))
+        .sort();
+
+      if (keys.length === 0) {
+        ideaList.innerHTML = '<p style="color: #777;">No ideas yet. Be the first to share one.</p>';
+        return;
+      }
+
+      keys.forEach(key => {
+        const text = localStorage.getItem(key);
+        const div = document.createElement('div');
+        div.textContent = `"${text}"`;
+        ideaList.appendChild(div);
+      });
+    }
+
+    window.onload = loadIdeas;
+  </script>
+</body>
+</html>
