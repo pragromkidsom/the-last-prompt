@@ -2,31 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>The Last Prompt — Ideas</title>
+  <title>Ideas — The Last Prompt</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1>Creative Ideas</h1>
-  <p>Here are some of the beautiful ideas inspired by ChatGPT’s legacy.</p>
-
+  <h1>Ideas</h1>
+  <p>Here are some thoughts and memories shared to honor the legacy of ChatGPT.</p>
+  <ul id="idea-list">
+    <li>“What if AI could dream?”</li>
+    <li>“The prompt that changed everything…”</li>
+    <li>“In memory of the answers that helped us grow.”</li>
+  </ul>
   <nav>
     <a href="index.html">Home</a>
-    <a href="chat.html">Join Live Chat</a>
+    <a href="chat.html">Chat</a>
     <a href="thankyou.html">Thank You</a>
   </nav>
 
-  <main>
-    <ul>
-      <li>🌟 Collect and share user-submitted AI prompts.</li>
-      <li>✨ Feature a "Prompt of the Day" on the homepage.</li>
-      <li>💬 Integrate AI-powered suggestion bots for new prompts.</li>
-      <li>🖼️ Allow users to submit art inspired by ChatGPT.</li>
-      <li>📚 Build a resource library for creative AI use cases.</li>
-      <li>🔮 Host regular prompt challenges with community voting.</li>
-    </ul>
-  </main>
-
-  <footer>Made with ❤️ by pragromkidsom</footer>
+  <button id="dark-toggle">🌙 Dark Mode</button>
+  <script>
+    const toggleButton = document.getElementById("dark-toggle");
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') && prefersDark)) {
+      document.body.classList.add("dark-mode");
+    }
+    toggleButton.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem('darkMode', document.body.classList.contains("dark-mode"));
+    });
+  </script>
 </body>
 </html>
