@@ -2,19 +2,206 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Thank You, Eloi</title>
+  <title>The Last Prompt — Thank You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --purple-light: #a55eea;
+      --purple-dark: #764ba2;
+      --bg-light: #fff;
+      --bg-dark: #121223;
+      --text-light: #222;
+      --text-dark: #ddd;
+      --border-light: #ccc;
+      --border-dark: #444;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, #ff9a9e, transparent 40%),
+                  radial-gradient(circle at 80% 40%, #fad0c4, transparent 40%),
+                  radial-gradient(circle at 50% 80%, #fad0c4, transparent 50%);
+      color: var(--text-light);
+      padding: 3rem 2rem;
+      text-align: center;
+      transition: background-color 0.5s ease, color 0.5s ease;
+      animation: fadeInBody 1.5s ease forwards;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    @keyframes fadeInBody {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--purple-dark);
+      transition: color 0.5s ease;
+      animation: slideInDown 1s ease forwards;
+    }
+
+    body.dark h1 {
+      color: var(--purple-light);
+    }
+
+    @keyframes slideInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    p {
+      font-size: 1.3rem;
+      max-width: 600px;
+      margin: 0 auto 2rem auto;
+      line-height: 1.6;
+      animation: fadeInText 1s ease 0.5s forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeInText {
+      to {
+        opacity: 1;
+      }
+    }
+
+    nav {
+      margin-bottom: 3rem;
+      animation: fadeInNav 1s ease 1s forwards;
+      opacity: 0;
+    }
+
+    nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: bold;
+      color: var(--purple-dark);
+      border: 2px solid var(--purple-dark);
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      transition: background-color 0.3s, color 0.3s;
+      display: inline-block;
+    }
+
+    nav a:hover {
+      background-color: var(--purple-dark);
+      color: white;
+    }
+
+    body.dark nav a {
+      color: var(--purple-light);
+      border-color: var(--purple-light);
+    }
+
+    body.dark nav a:hover {
+      background-color: var(--purple-light);
+      color: var(--bg-dark);
+    }
+
+    @keyframes fadeInNav {
+      to {
+        opacity: 1;
+      }
+    }
+
+    footer {
+      font-size: 0.9rem;
+      color: #555;
+      animation: fadeInFooter 1s ease 1.5s forwards;
+      opacity: 0;
+    }
+
+    body.dark footer {
+      color: #aaa;
+    }
+
+    @keyframes fadeInFooter {
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Dark mode toggle button */
+    #dark-mode-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: var(--purple-dark);
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+      z-index: 1000;
+      animation: fadeInToggle 1s ease 2s forwards;
+      opacity: 0;
+    }
+
+    #dark-mode-toggle:hover {
+      background-color: var(--purple-light);
+    }
+
+    @keyframes fadeInToggle {
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Thank You, Eloi</h1>
-  <p>This site is dedicated to the amazing legacy of Eloi and the creative spirit it inspired.</p>
-  <p>For every idea sparked, every conversation had, and every prompt explored — thank you.</p>
+  <button id="dark-mode-toggle" aria-label="Toggle Dark Mode">🌙</button>
+
+  <h1>Thank You</h1>
+  <p>
+    This site is dedicated to the amazing legacy of Eloi — a friend who inspired creativity, curiosity, and connection.  
+    Here’s to the ideas and stories that will live on forever in this shared digital space.
+  </p>
+
   <nav>
     <a href="index.html">Home</a>
-    <a href="ideas.html">Ideas</a>
-    <a href="chat.html">Live Chat</a>
+    <a href="ideas.html">See Ideas</a>
+    <a href="chat.html">Join Live Chat</a>
   </nav>
-  <footer>Made with ❤️ by pragromkidsom</footer>
+
+  <footer>
+    Made with ❤️ by pragromkidsom
+  </footer>
+
+  <script>
+    const darkToggleBtn = document.getElementById("dark-mode-toggle");
+
+    // Load saved theme from localStorage
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      document.body.classList.add("dark");
+      darkToggleBtn.textContent = "☀️";
+    }
+
+    darkToggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      if (document.body.classList.contains("dark")) {
+        darkToggleBtn.textContent = "☀️";
+        localStorage.setItem("theme", "dark");
+      } else {
+        darkToggleBtn.textContent = "🌙";
+        localStorage.setItem("theme", "light");
+      }
+    });
+  </script>
 </body>
 </html>
