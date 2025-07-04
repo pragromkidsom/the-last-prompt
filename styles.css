@@ -1,5 +1,4 @@
-/* Base styles */
-
+/* Complete CSS with dark mode */
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -14,20 +13,9 @@ body {
   color: #222;
   text-align: center;
   padding: 2rem;
-  transition: background-color 0.3s, color 0.3s;
 }
-
-h1 {
-  font-size: 3rem;
-  margin-bottom: 0.5rem;
-}
-
-p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  max-width: 600px;
-}
-
+h1 { font-size: 3rem; margin-bottom: 0.5rem; }
+p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 600px; }
 nav a {
   margin: 0 1rem;
   text-decoration: none;
@@ -38,52 +26,48 @@ nav a {
   border-radius: 25px;
   transition: background-color 0.3s, color 0.3s;
 }
-
 nav a:hover {
   background-color: #764ba2;
   color: white;
 }
-
 footer {
   margin-top: auto;
   padding: 1rem;
   font-size: 0.9rem;
   color: #555;
 }
-
-header {
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
 #dark-mode-toggle {
-  font-size: 1.5rem;
-  background: none;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  border-radius: 25px;
   border: none;
+  background-color: #764ba2;
+  color: white;
   cursor: pointer;
-  user-select: none;
+  transition: background-color 0.3s;
+  z-index: 1000;
 }
-
-/* Dark mode styles */
+#dark-mode-toggle:hover {
+  background-color: #a55eea;
+}
 body.dark-mode {
-  background: #121212;
-  color: #ddd;
+  background-color: #121212;
+  color: #e0e0e0;
+  background: radial-gradient(circle at 20% 20%, #5a1a1f, transparent 40%),
+              radial-gradient(circle at 80% 40%, #733d4a, transparent 40%),
+              radial-gradient(circle at 50% 80%, #733d4a, transparent 50%);
 }
-
 body.dark-mode nav a {
   color: #bb86fc;
   border-color: #bb86fc;
 }
-
 body.dark-mode nav a:hover {
   background-color: #bb86fc;
   color: #121212;
 }
-
 body.dark-mode footer {
   color: #888;
 }
