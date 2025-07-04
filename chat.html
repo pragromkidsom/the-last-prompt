@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Last Prompt — Live Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    header {
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      background: rgba(0,0,0,0.2);
+    }
+    #messages {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      background: rgba(0,0,0,0.3);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    #messages div {
+      margin-bottom: 0.75rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      word-wrap: break-word;
+      max-width: 80%;
+    }
+    #inputArea {
+      display: flex;
+      padding: 1rem;
+      background: rgba(0,0,0,0.2);
+    }
+    #inputArea input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      margin-right: 1rem;
+    }
+    #inputArea button {
+      padding: 0.75rem 1.5rem;
+      background: #ff6f61;
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #inputArea button:hover {
+      background: #e85a4f;
+    }
+  </style>
+</head>
+<body>
+  <header>The Last Prompt — Live Chat</header>
+  <div id="messages"></div>
+  <form id="chatForm" autocomplete="off" spellcheck="false">
+    <div id="inputArea">
+      <input type="text" id="messageInput" placeholder="Type your message..." required />
+      <button type="submit">Send</button>
+    </div>
+  </form>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBllKA1NhEoYW3HE132_0val__DdhZhaXI",
+      authDomain: "the-last-prompt.firebaseapp.com",
+      databaseURL: "https://the-last-prompt-default-rtdb.firebaseio.com",
+      projectId: "the-last-prompt",
+      storageBucket: "the-last-prompt.firebasestorage.app",
+      messagingSenderId: "263820317173",
+      appId: "1:263820317173:web:09a9bcbd54f90b972390bc"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const messagesDiv = document.getElementById('messages');
+    const chatForm = document.getElementById('chatForm');
+    const messageInput = document.getElementById('messageInput');
+
+    // Listen for new chat messages added to Firebase
+    db.ref('chat').limitToLast(50).on('child_added', snapshot => {
+      const msg = snapshot.val();
+      const msgDiv = document.createElement('div');
+      msgDiv.textContent = msg.text;
+      messagesDiv.appendChild(msgDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight; // scroll down
+    });
+
+    // Handle form submission
+    chatForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const text = messageInput.value.trim();
+      if (text.length > 0) {
+        // Push message to Firebase with timestamp
+        db.ref('chat').push({
+          text,
+          timestamp: Date.now()
+        });
+        messageInput.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
