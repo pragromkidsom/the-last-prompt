@@ -3,107 +3,95 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Last Prompt - Ideas</title>
+  <title>Prompt Wall</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      overflow: auto;
       padding: 3rem 1rem;
-      animation: float 30s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       padding: 2rem;
       border-radius: 16px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
       max-width: 700px;
       width: 100%;
-      opacity: 0;
-      animation: fadeIn ease 1s forwards;
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
     }
 
     h1 {
-      margin-top: 0;
-      margin-bottom: 1.5rem;
-      color: #333;
-      font-weight: 700;
       text-align: center;
+      margin-bottom: 1.5rem;
     }
 
     ul {
       list-style: none;
       padding: 0;
-      max-height: 400px;
-      overflow-y: auto;
-      border-top: 2px solid #ff6f61;
     }
 
-    ul li {
-      padding: 0.75rem 1rem;
+    li {
+      padding: 1rem;
       border-bottom: 1px solid #eee;
       font-size: 1.1rem;
-      color: #555;
-      transition: background-color 0.3s ease;
-    }
-
-    ul li:hover {
-      background-color: #ffebe8;
+      color: #444;
     }
 
     a.back-link {
       display: block;
-      margin-top: 2rem;
       text-align: center;
-      text-decoration: none;
+      margin-top: 2rem;
       color: #ff6f61;
-      font-weight: 600;
-      transition: color 0.3s ease;
-    }
-
-    a.back-link:hover {
-      color: #e85a4f;
+      text-decoration: none;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>All Prompts</h1>
-    <ul id="prompt-list"></ul>
+    <h1>Global Prompt Wall</h1>
+    <ul id="promptList"></ul>
     <a href="index.html" class="back-link">← Back to Submit</a>
   </div>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
   <script>
-    const ul = document.getElementById("prompt-list");
-    const stored = localStorage.getItem("prompts");
-    const prompts = stored ? JSON.parse(stored) : [];
+    const firebaseConfig = {
+      apiKey: "AIzaSyBllKA1NhEoYW3HE132_0val__DdhZhaXI",
+      authDomain: "the-last-prompt.firebaseapp.com",
+      databaseURL: "https://the-last-prompt-default-rtdb.firebaseio.com",
+      projectId: "the-last-prompt",
+      storageBucket: "the-last-prompt.firebasestorage.app",
+      messagingSenderId: "263820317173",
+      appId: "1:263820317173:web:09a9bcbd54f90b972390bc"
+    };
 
-    if (prompts.length === 0) {
-      ul.innerHTML = "<li>No prompts yet. Go create one!</li>";
-    } else {
-      prompts.forEach(prompt => {
-        const li = document.createElement("li");
-        li.textContent = prompt;
-        ul.appendChild(li);
-      });
-    }
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const ul = document.getElementById("promptList");
+
+    db.ref("prompts").orderByChild("timestamp").on("value", (snapshot) => {
+      ul.innerHTML = "";
+      const data = snapshot.val();
+      if (data) {
+        const prompts = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+        prompts.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = item.text;
+          ul.appendChild(li);
+        });
+      } else {
+        ul.innerHTML = "<li>No prompts yet. Be the first!</li>";
+      }
+    });
   </script>
 </body>
 </html>
