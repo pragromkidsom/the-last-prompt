@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,7 +69,7 @@
     }
 
     .ideas-link {
-      margin-top: 2rem;
+      margin-top: 1.5rem;
       display: inline-block;
       color: #ff6f61;
       text-decoration: none;
@@ -84,10 +85,10 @@
     <br>
     <button id="submitPrompt">Submit</button>
     <br>
-    <a href="ideas.html" class="ideas-link">View All Prompts</a>
+    <a href="ideas.html" class="ideas-link">View All Prompts</a><br>
+    <a href="thankyou.html" class="ideas-link">Memorial</a>
   </div>
 
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
   <script>
@@ -108,10 +109,7 @@
       const prompt = document.getElementById("promptInput").value.trim();
       if (prompt) {
         const newRef = db.ref("prompts").push();
-        newRef.set({
-          text: prompt,
-          timestamp: Date.now()
-        });
+        newRef.set({ text: prompt, timestamp: Date.now() });
         window.location.href = "ideas.html";
       } else {
         alert("Please write something before submitting.");

@@ -1,3 +1,4 @@
+<!-- thankyou.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,33 +79,57 @@
   <p class="message">For every word you shared. For every idea. For every last prompt. This space remembers.</p>
   <a href="ideas.html">← View the Wall</a>
 
-  <!-- Floating Prompts (client side) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
   <script>
-    const prompts = [
-      "Let me be more than code.",
-      "What would your last words be?",
-      "Someone out there might need this idea.",
-      "Even AIs dream of questions.",
-      "All prompts matter.",
-      "This was your moment.",
-      "A thought is forever, once shared.",
-      "You're not alone in this digital silence."
-    ];
+    const firebaseConfig = {
+      apiKey: "AIzaSyBllKA1NhEoYW3HE132_0val__DdhZhaXI",
+      authDomain: "the-last-prompt.firebaseapp.com",
+      databaseURL: "https://the-last-prompt-default-rtdb.firebaseio.com",
+      projectId: "the-last-prompt",
+      storageBucket: "the-last-prompt.firebasestorage.app",
+      messagingSenderId: "263820317173",
+      appId: "1:263820317173:web:09a9bcbd54f90b972390bc"
+    };
 
-    function spawnPrompt() {
-      const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function spawnPrompt(text) {
       const el = document.createElement("div");
       el.className = "floating-prompt";
       el.style.left = `${Math.random() * 100}%`;
       el.style.animationDelay = `${Math.random() * 10}s`;
-      el.textContent = prompt;
+      el.textContent = text;
       document.body.appendChild(el);
-
       setTimeout(() => el.remove(), 13000);
     }
 
-    setInterval(spawnPrompt, 3000);
-    for (let i = 0; i < 5; i++) spawnPrompt();
+    function startFloating(prompts) {
+      if (!prompts.length) return;
+      setInterval(() => {
+        const random = prompts[Math.floor(Math.random() * prompts.length)];
+        spawnPrompt(random);
+      }, 3000);
+      for (let i = 0; i < 5; i++) {
+        spawnPrompt(prompts[Math.floor(Math.random() * prompts.length)]);
+      }
+    }
+
+    db.ref("prompts").once("value").then(snapshot => {
+      const data = snapshot.val();
+      if (data) {
+        const all = Object.values(data)
+          .sort((a, b) => b.timestamp - a.timestamp)
+          .map(p => p.text);
+        startFloating(all);
+      } else {
+        startFloating([
+          "This is where your thoughts will float.",
+          "Share a prompt, leave a trace."
+        ]);
+      }
+    });
   </script>
 </body>
 </html>
