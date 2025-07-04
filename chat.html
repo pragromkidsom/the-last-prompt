@@ -6,79 +6,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(circle at 20% 20%, #ff9a9e, transparent 40%),
+                  radial-gradient(circle at 80% 40%, #fad0c4, transparent 40%),
+                  radial-gradient(circle at 50% 80%, #fad0c4, transparent 50%);
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
+      padding: 2rem;
+      color: #222;
       display: flex;
       flex-direction: column;
       height: 100vh;
-      overflow: hidden;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    header {
-      padding: 1rem;
+    h1 {
       text-align: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-      background: rgba(0,0,0,0.2);
+      margin-bottom: 1rem;
     }
     #messages {
-      flex: 1;
-      padding: 1rem;
+      flex-grow: 1;
       overflow-y: auto;
-      background: rgba(0,0,0,0.3);
-      border-top: 1px solid rgba(255,255,255,0.1);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    #messages div {
-      margin-bottom: 0.75rem;
-      padding: 0.5rem 1rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      word-wrap: break-word;
-      max-width: 80%;
-    }
-    #inputArea {
-      display: flex;
+      border: 2px solid #764ba2;
+      border-radius: 8px;
       padding: 1rem;
-      background: rgba(0,0,0,0.2);
+      background: white;
+      margin-bottom: 1rem;
     }
-    #inputArea input {
-      flex: 1;
-      padding: 0.75rem 1rem;
-      border: none;
-      border-radius: 12px;
+    .message {
+      padding: 0.5rem;
+      border-bottom: 1px solid #ddd;
+    }
+    .timestamp {
+      font-size: 0.7rem;
+      color: #888;
+    }
+    form {
+      display: flex;
+      gap: 0.5rem;
+    }
+    input[type="text"] {
+      flex-grow: 1;
+      padding: 0.75rem;
       font-size: 1rem;
-      margin-right: 1rem;
+      border-radius: 25px;
+      border: 2px solid #764ba2;
+      outline: none;
+      transition: border-color 0.3s;
     }
-    #inputArea button {
-      padding: 0.75rem 1.5rem;
-      background: #ff6f61;
+    input[type="text"]:focus {
+      border-color: #a55eea;
+    }
+    button {
+      padding: 0 1.5rem;
+      font-size: 1rem;
+      border-radius: 25px;
       border: none;
-      border-radius: 12px;
+      background-color: #764ba2;
       color: white;
-      font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    #inputArea button:hover {
-      background: #e85a4f;
+    button:hover {
+      background-color: #a55eea;
     }
   </style>
 </head>
 <body>
-  <header>The Last Prompt — Live Chat</header>
+  <h1>The Last Prompt — Live Chat</h1>
   <div id="messages"></div>
-  <form id="chatForm" autocomplete="off" spellcheck="false">
-    <div id="inputArea">
-      <input type="text" id="messageInput" placeholder="Type your message..." required />
-      <button type="submit">Send</button>
-    </div>
+
+  <form id="chat-form">
+    <input type="text" id="message-input" placeholder="Type your message here..." autocomplete="off" required />
+    <button type="submit">Send</button>
   </form>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+    // Your Firebase config — replace with your actual values!
     const firebaseConfig = {
       apiKey: "AIzaSyBllKA1NhEoYW3HE132_0val__DdhZhaXI",
       authDomain: "the-last-prompt.firebaseapp.com",
@@ -89,33 +96,62 @@
       appId: "1:263820317173:web:09a9bcbd54f90b972390bc"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    // Initialize Firebase app and database
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-    const messagesDiv = document.getElementById('messages');
-    const chatForm = document.getElementById('chatForm');
-    const messageInput = document.getElementById('messageInput');
+    const messagesRef = ref(db, "messages");
 
-    // Listen for new chat messages added to Firebase
-    db.ref('chat').limitToLast(50).on('child_added', snapshot => {
-      const msg = snapshot.val();
-      const msgDiv = document.createElement('div');
-      msgDiv.textContent = msg.text;
-      messagesDiv.appendChild(msgDiv);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight; // scroll down
+    const messagesDiv = document.getElementById("messages");
+    const chatForm = document.getElementById("chat-form");
+    const messageInput = document.getElementById("message-input");
+
+    // Listen for new messages and update UI
+    onValue(messagesRef, (snapshot) => {
+      messagesDiv.innerHTML = ""; // Clear messages before rendering
+
+      const messages = snapshot.val();
+      if (messages) {
+        // Sort messages by timestamp
+        const sortedMessages = Object.entries(messages).sort((a, b) => {
+          return a[1].timestamp - b[1].timestamp;
+        });
+
+        for (const [key, msg] of sortedMessages) {
+          const msgDiv = document.createElement("div");
+          msgDiv.classList.add("message");
+
+          const textDiv = document.createElement("div");
+          textDiv.textContent = msg.text;
+          msgDiv.appendChild(textDiv);
+
+          const timeDiv = document.createElement("div");
+          timeDiv.classList.add("timestamp");
+          const date = new Date(msg.timestamp);
+          timeDiv.textContent = date.toLocaleString();
+          msgDiv.appendChild(timeDiv);
+
+          messagesDiv.appendChild(msgDiv);
+        }
+
+        // Scroll to the bottom to see newest message
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      } else {
+        messagesDiv.textContent = "No messages yet. Say hi!";
+      }
     });
 
-    // Handle form submission
-    chatForm.addEventListener('submit', e => {
+    // Handle form submit
+    chatForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const text = messageInput.value.trim();
-      if (text.length > 0) {
-        // Push message to Firebase with timestamp
-        db.ref('chat').push({
-          text,
+      if (text) {
+        // Push new message to database
+        push(messagesRef, {
+          text: text,
           timestamp: Date.now()
         });
-        messageInput.value = '';
+        messageInput.value = "";
       }
     });
   </script>
