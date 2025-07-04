@@ -74,7 +74,7 @@
 </head>
 <body>
   <h1>The Last Prompt — Live Chat</h1>
-  <div id="messages"></div>
+  <div id="messages">Loading messages...</div>
 
   <form id="chat-form">
     <input type="text" id="message-input" placeholder="Type your message here..." autocomplete="off" required />
@@ -83,13 +83,13 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-    // Your Firebase config — replace with your actual values!
+    // Your Firebase config — with the correct Europe-West1 databaseURL!
     const firebaseConfig = {
       apiKey: "AIzaSyBllKA1NhEoYW3HE132_0val__DdhZhaXI",
       authDomain: "the-last-prompt.firebaseapp.com",
-      databaseURL: "https://the-last-prompt-default-rtdb.firebaseio.com",
+      databaseURL: "https://the-last-prompt-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "the-last-prompt",
       storageBucket: "the-last-prompt.firebasestorage.app",
       messagingSenderId: "263820317173",
