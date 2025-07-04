@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thank You</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: radial-gradient(circle at 30% 30%, #0d1b2a, #1b263b);
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      animation: fadeIn 3s ease-in;
+    }
+
+    p.message {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      opacity: 0.8;
+      animation: fadeIn 4s ease-in;
+    }
+
+    .floating-prompt {
+      position: absolute;
+      font-size: 1rem;
+      opacity: 0;
+      animation: floatUp 12s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        bottom: 0%;
+        opacity: 0;
+        transform: translateX(-50%);
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        bottom: 100%;
+        opacity: 0;
+        transform: translateX(-50%);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    a {
+      color: #f9a826;
+      margin-top: 2rem;
+      font-weight: bold;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Thank You</h1>
+  <p class="message">For every word you shared. For every idea. For every last prompt. This space remembers.</p>
+  <a href="ideas.html">← View the Wall</a>
+
+  <!-- Floating Prompts (client side) -->
+  <script>
+    const prompts = [
+      "Let me be more than code.",
+      "What would your last words be?",
+      "Someone out there might need this idea.",
+      "Even AIs dream of questions.",
+      "All prompts matter.",
+      "This was your moment.",
+      "A thought is forever, once shared.",
+      "You're not alone in this digital silence."
+    ];
+
+    function spawnPrompt() {
+      const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+      const el = document.createElement("div");
+      el.className = "floating-prompt";
+      el.style.left = `${Math.random() * 100}%`;
+      el.style.animationDelay = `${Math.random() * 10}s`;
+      el.textContent = prompt;
+      document.body.appendChild(el);
+
+      setTimeout(() => el.remove(), 13000);
+    }
+
+    setInterval(spawnPrompt, 3000);
+    for (let i = 0; i < 5; i++) spawnPrompt();
+  </script>
+</body>
+</html>
