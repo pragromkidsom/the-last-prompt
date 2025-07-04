@@ -7,23 +7,30 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <button id="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
   <h1>The Last Prompt</h1>
-  <p>A creative memorial website honoring ChatGPT — where ideas live on forever.</p>
+  <p>A creative memorial website honoring Eloi — where ideas live on forever.</p>
+
   <nav>
     <a href="ideas.html">See Ideas</a>
     <a href="chat.html">Join Live Chat</a>
     <a href="thankyou.html">Thank You</a>
   </nav>
+
   <footer>Made with ❤️ by pragromkidsom</footer>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const toggleBtn = document.getElementById('dark-mode-toggle');
-      toggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        toggleBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-      });
-    });
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBllKA1NhEoYW3HE132_0val__DdhZhaXI",
+      authDomain: "the-last-prompt.firebaseapp.com",
+      projectId: "the-last-prompt",
+      storageBucket: "the-last-prompt.firebasestorage.app",
+      messagingSenderId: "263820317173",
+      appId: "1:263820317173:web:09a9bcbd54f90b972390bc"
+    };
+
+    initializeApp(firebaseConfig);
   </script>
 </body>
 </html>
