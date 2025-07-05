@@ -1,115 +1,48 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>The Last Prompt — Thank You</title>
+  <title>The Last Prompt - Thank You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    /* Dark & light mode variables */
-    :root {
-      --bg-light: #fff;
-      --bg-dark: #1e1e1e;
-      --text-light: #222;
-      --text-dark: #eee;
-      --primary: #764ba2;
-      --primary-light: #a55eea;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg-light);
-      color: var(--text-light);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-      padding: 2rem;
-      transition: background-color 0.5s, color 0.5s;
-    }
-
-    body.dark-mode {
-      background-color: var(--bg-dark);
-      color: var(--text-dark);
-    }
-
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      animation: fadeInUp 1s ease forwards;
-    }
-
-    p {
-      font-size: 1.3rem;
-      max-width: 600px;
-      animation: fadeInUp 1.2s ease forwards;
-      margin-bottom: 2rem;
-    }
-
-    button {
-      background-color: var(--primary);
-      border: none;
-      border-radius: 25px;
-      padding: 0.75rem 2rem;
-      font-size: 1rem;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      animation: fadeInUp 1.4s ease forwards;
-    }
-
-    button:hover {
-      background-color: var(--primary-light);
-    }
-
-    /* Animations */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Dark mode toggle style */
-    .dark-toggle {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      background: var(--primary);
-      border: none;
-      border-radius: 50%;
-      width: 3rem;
-      height: 3rem;
-      font-size: 1.5rem;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(118,75,162,0.6);
-      transition: background-color 0.3s;
-    }
-
-    .dark-toggle:hover {
-      background-color: var(--primary-light);
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <button class="dark-toggle" aria-label="Toggle dark mode">🌙</button>
+  <header>
+    <h1>Thank You</h1>
+    <button id="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+  </header>
 
-  <h1>Thank You, Eloi!</h1>
-  <p>This website is a celebration of creativity and friendship — a place where ideas live on forever.</p>
-  <p>Made with ❤️ by pragromkidsom.</p>
+  <main>
+    <section class="thankyou-message">
+      <p>
+        This site is dedicated to the amazing legacy of Eloi and the creative spirit it inspired.
+      </p>
+      <p>
+        Your presence here means the world. Keep creating, dreaming, and sharing.
+      </p>
+      <a href="index.html" class="button">Back to Home</a>
+    </section>
+  </main>
+
+  <footer>Made with ❤️ by pragromkidsom</footer>
 
   <script>
-    const toggleBtn = document.querySelector('.dark-toggle');
+    // Dark mode toggle
+    const toggleBtn = document.getElementById('dark-mode-toggle');
+    const body = document.body;
+    if (localStorage.getItem('theme') === 'dark') {
+      body.classList.add('dark');
+      toggleBtn.textContent = '☀️';
+    }
     toggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      toggleBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+      body.classList.toggle('dark');
+      if (body.classList.contains('dark')) {
+        toggleBtn.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        toggleBtn.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+      }
     });
   </script>
 </body>

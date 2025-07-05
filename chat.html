@@ -2,268 +2,98 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>The Last Prompt — Live Chat</title>
+  <title>The Last Prompt - Live Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --purple-light: #a55eea;
-      --purple-dark: #764ba2;
-      --bg-light: #fff;
-      --bg-dark: #1e1e2f;
-      --text-light: #222;
-      --text-dark: #ddd;
-      --msg-user-bg-light: var(--purple-light);
-      --msg-bot-bg-light: var(--purple-dark);
-      --msg-user-bg-dark: #8e5de8;
-      --msg-bot-bg-dark: #5d3ea7;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 2rem;
-      color: var(--text-light);
-      background: radial-gradient(circle at 20% 20%, #ff9a9e, transparent 40%),
-                  radial-gradient(circle at 80% 40%, #fad0c4, transparent 40%),
-                  radial-gradient(circle at 50% 80%, #fad0c4, transparent 50%);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    body.dark {
-      background: #121223;
-      color: var(--text-dark);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-      color: var(--purple-dark);
-      transition: color 0.3s;
-    }
-
-    body.dark h1 {
-      color: var(--msg-bot-bg-dark);
-    }
-
-    #messages {
-      flex-grow: 1;
-      overflow-y: auto;
-      border: 2px solid var(--purple-dark);
-      border-radius: 8px;
-      padding: 1rem;
-      background: var(--bg-light);
-      margin-bottom: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      transition: background-color 0.3s, border-color 0.3s;
-    }
-
-    body.dark #messages {
-      background: #2a2a3f;
-      border-color: var(--msg-bot-bg-dark);
-    }
-
-    .message {
-      padding: 0.5rem 0.75rem;
-      border-radius: 15px;
-      max-width: 80%;
-      word-wrap: break-word;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      animation: fadeIn 0.3s ease;
-      color: white;
-    }
-
-    .message.user {
-      background-color: var(--msg-user-bg-light);
-      align-self: flex-end;
-      border-bottom-right-radius: 0;
-      transition: background-color 0.3s;
-    }
-
-    .message.bot {
-      background-color: var(--msg-bot-bg-light);
-      align-self: flex-start;
-      border-bottom-left-radius: 0;
-      transition: background-color 0.3s;
-    }
-
-    body.dark .message.user {
-      background-color: var(--msg-user-bg-dark);
-    }
-
-    body.dark .message.bot {
-      background-color: var(--msg-bot-bg-dark);
-    }
-
-    .timestamp {
-      font-size: 0.7rem;
-      color: #bbb;
-      margin-top: 0.25rem;
-      font-style: italic;
-    }
-
-    form {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    input[type="text"] {
-      flex-grow: 1;
-      padding: 0.75rem;
-      font-size: 1rem;
-      border-radius: 25px;
-      border: 2px solid var(--purple-dark);
-      outline: none;
-      transition: border-color 0.3s, background-color 0.3s, color 0.3s;
-      background: var(--bg-light);
-      color: var(--text-light);
-    }
-
-    input[type="text"]:focus {
-      border-color: var(--purple-light);
-    }
-
-    body.dark input[type="text"] {
-      background: #3a3a5a;
-      color: var(--text-dark);
-      border-color: var(--msg-bot-bg-dark);
-    }
-
-    button {
-      padding: 0 1.5rem;
-      font-size: 1rem;
-      border-radius: 25px;
-      border: none;
-      background-color: var(--purple-dark);
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: var(--purple-light);
-    }
-
-    #dark-mode-toggle {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      background: var(--purple-dark);
-      border: none;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background-color 0.3s;
-      z-index: 1000;
-    }
-
-    #dark-mode-toggle:hover {
-      background-color: var(--purple-light);
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <button id="dark-mode-toggle" aria-label="Toggle Dark Mode">🌙</button>
+  <header>
+    <h1>Live Chat with Eloi</h1>
+    <button id="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+  </header>
 
-  <h1>The Last Prompt — Live Chat</h1>
-  <div id="messages">Loading chat...</div>
+  <main>
+    <section id="chat-container">
+      <ul id="messages" aria-live="polite"></ul>
+      <form id="chat-form">
+        <input
+          type="text"
+          id="chat-input"
+          placeholder="Type your message here..."
+          autocomplete="off"
+          required
+          aria-label="Chat input"
+        />
+        <button type="submit">Send</button>
+      </form>
+    </section>
+  </main>
 
-  <form id="chat-form">
-    <input type="text" id="message-input" placeholder="Type your message here..." autocomplete="off" required />
-    <button type="submit">Send</button>
-  </form>
+  <footer>Made with ❤️ by pragromkidsom</footer>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBllKA1NhEoYW3HE132_0val__DdhZhaXI",
-      authDomain: "the-last-prompt.firebaseapp.com",
-      databaseURL: "https://the-last-prompt-default-rtdb.firebaseio.com",
-      projectId: "the-last-prompt",
-      storageBucket: "the-last-prompt.firebasestorage.app",
-      messagingSenderId: "263820317173",
-      appId: "1:263820317173:web:09a9bcbd54f90b972390bc"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const messagesRef = ref(db, "chatMessages");
-
-    const messagesDiv = document.getElementById("messages");
-    const chatForm = document.getElementById("chat-form");
-    const messageInput = document.getElementById("message-input");
-    const darkToggleBtn = document.getElementById("dark-mode-toggle");
-
-    // Load dark mode preference
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      document.body.classList.add("dark");
-      darkToggleBtn.textContent = "☀️";
+  <script>
+    // Dark mode toggle logic
+    const toggleBtn = document.getElementById('dark-mode-toggle');
+    const body = document.body;
+    if (localStorage.getItem('theme') === 'dark') {
+      body.classList.add('dark');
+      toggleBtn.textContent = '☀️';
     }
-
-    // Toggle dark mode
-    darkToggleBtn.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-      if (document.body.classList.contains("dark")) {
-        darkToggleBtn.textContent = "☀️";
-        localStorage.setItem("theme", "dark");
+    toggleBtn.addEventListener('click', () => {
+      body.classList.toggle('dark');
+      if (body.classList.contains('dark')) {
+        toggleBtn.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
       } else {
-        darkToggleBtn.textContent = "🌙";
-        localStorage.setItem("theme", "light");
+        toggleBtn.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
       }
     });
 
-    function addMessageToUI(message) {
-      const msgDiv = document.createElement("div");
-      msgDiv.classList.add("message");
-      msgDiv.classList.add(message.sender === "user" ? "user" : "bot");
+    // Chat functionality
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('chat-input');
+    const messagesList = document.getElementById('messages');
 
-      const textDiv = document.createElement("div");
-      textDiv.textContent = message.text;
-      msgDiv.appendChild(textDiv);
-
-      const timeDiv = document.createElement("div");
-      timeDiv.classList.add("timestamp");
-      const date = new Date(message.timestamp);
-      timeDiv.textContent = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      msgDiv.appendChild(timeDiv);
-
-      messagesDiv.appendChild(msgDiv);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    // Function to append message to chat
+    function appendMessage(text, sender) {
+      const li = document.createElement('li');
+      li.className = sender === 'user' ? 'message user' : 'message eloi';
+      li.textContent = text;
+      messagesList.appendChild(li);
+      messagesList.scrollTop = messagesList.scrollHeight;
     }
 
-    onChildAdded(messagesRef, (data) => {
-      addMessageToUI(data.val());
-    });
-
-    chatForm.addEventListener("submit", async (e) => {
+    // Submit message and fetch response from backend
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const text = messageInput.value.trim();
-      if (!text) return;
+      const message = input.value.trim();
+      if (!message) return;
 
-      await push(messagesRef, {
-        text: text,
-        timestamp: Date.now(),
-        sender: "user"
-      });
+      appendMessage(message, 'user');
+      input.value = '';
+      input.disabled = true;
 
-      messageInput.value = "";
+      try {
+        const res = await fetch('https://eloi-chat-backend.onrender.com/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message })
+        });
+        const data = await res.json();
+        if (data.reply) {
+          appendMessage(data.reply, 'eloi');
+        } else {
+          appendMessage("Sorry, Eloi didn't get that.", 'eloi');
+        }
+      } catch (error) {
+        appendMessage("Sorry, something went wrong.", 'eloi');
+      } finally {
+        input.disabled = false;
+        input.focus();
+      }
     });
   </script>
 </body>
